@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<script src="jquery-1.11.2.js"></script>
+<body style="margin:2px;">
+
+<canvas id="myCanvas" style="margin:0px;" >
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+		<script>
+		var w = window.innerWidth -10;
+		var h = window.innerHeight-10;
+		var c = document.getElementById("myCanvas");
+		$('#myCanvas').attr("width",w);
+		$('#myCanvas').attr("height",h);
+		
+		$('body').attr("width",w);
+		$('body').attr("height",h);
+		var ctx = c.getContext("2d");
+		ctx.beginPath();
+		
+		
+		//******* Draw Vertical Lines ******
+		
+		
+		// finding out how many
+		// pixel to skip between
+		// each vertical line
+		var VerticalLineSkp = w/400;
+		var VerticalLinePosition = 0;
+		var VerticalLinePositions=[];
+		for(i=0;i<=400;i++){
+			
+			VerticalLinePosition = VerticalLinePosition + VerticalLineSkp;
+			ctx.moveTo(VerticalLinePosition, 0);
+			ctx.lineTo(VerticalLinePosition, h);
+			VerticalLinePositions.push(VerticalLinePosition);
+		}
+		
+		//******* Draw Horizontal Lines ******
+		
+		
+		// finding out how many
+		// pixel to skip between
+		// each horizontal lines
+		var HorizontalLineSkp = h/250;
+		var HorizontalLinePosition = 0;
+		var HorizontalLinePositions=[];
+		for(i=0;i<=250;i++){
+			
+			HorizontalLinePosition = HorizontalLinePosition + HorizontalLineSkp;
+			ctx.moveTo(0,HorizontalLinePosition);
+			ctx.lineTo(w, HorizontalLinePosition);
+			HorizontalLinePositions.push(HorizontalLinePosition);
+		}	
+		ctx.stroke();
+
+		
+		
+		
+		
+		$('body').click(function (e) { 
+			//alert(e.pageX + ' , ' + e.pageY);
+			// the click has been caught
+			// now we have to find what should be the number
+			// of the box at the position.
+				
+			// we have positions of horizontal lines and vertical lines
+			// on click we will get the co ordinates of click
+			// we will get the index of HorizontalLinePositions value nearest to ycordinate of click
+			// we will get the index of VerticalLinePositions value nearest to xcordinate of click
+			
+			var BoxNumberFromLeft;
+			for(i=0;i<399;i++){
+				if( VerticalLinePositions[i] <= e.pageX && VerticalLinePositions[i+1] > e.pageX )
+				{
+					BoxNumberFromLeft = i+1;
+				}
+			}
+			
+			var BoxNumberFromTop;
+			for(i=0;i<249;i++){
+				if( HorizontalLinePositions[i] <= e.pageY && HorizontalLinePositions[i+1] > e.pageY )
+				{
+					BoxNumberFromTop = i+1;
+				}
+			
+			}
+			//alert("BoxNumberFromTop  :"+BoxNumberFromTop + "  BoxNumberFromLeft :"+BoxNumberFromLeft)
+			NumberOfBoxesTillLineAbove = 0;
+			if(BoxNumberFromTop!=1)
+			{
+				NumberOfBoxesTillLineAbove = BoxNumberFromTop*400;
+			}
+			BoxNumber= NumberOfBoxesTillLineAbove + BoxNumberFromLeft;
+			if(BoxNumber>99999)
+			{
+				BoxNumber = 100000;
+			}
+			if(BoxNumber)
+			{
+				window.location="result.html?bn="+BoxNumber;
+			}
+		});
+		
+		</script>
+
+</body>
+</html>
